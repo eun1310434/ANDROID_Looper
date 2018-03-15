@@ -130,6 +130,4 @@ public class BackgroundThread extends Thread {
         otherThreadhandler = new BackgroundHandler(mainThreadHandler); //Thread 작업은 Thread 말고 Handler에서 실시!!!!!
         Looper.loop();
     }
-
-
 }

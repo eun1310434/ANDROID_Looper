@@ -26,6 +26,7 @@
        03) OtherThreadHandler에서 Message 처리
        04) OtherThreadHandler에서 MainThreadHandler를 통해 UI 처리 요청
        05) MainThreadHandler에서 UI 처리
+  ○ handleMessage가 처리될 때 UI 객체를 손쉽게 처리하기 위하여 Listener를 활용
 
 □ Study
   ○ Thread
@@ -101,35 +102,32 @@ package com.eun1310434.looper;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
-import android.widget.Button;
-import android.widget.ProgressBar;
 
 //MainActivity → Background → Thread BackgroundHandler → MainHandler
 class MainHandler extends Handler {
-    ProgressBar progress[];
-    Button button[];
 
-    public MainHandler(ProgressBar _progress[], Button _button[]){
-        this.progress = _progress;
-        this.button = _button;
+    //인터페이스를 활용한 날짜나 시간이 바뀔 때 호출되는 리스너 새로 정의
+    //innerClass
+    public interface OnProgressListener {
+        void onProgressChanged(int id, int incrementValue);
     }
+
+    OnProgressListener listener;
 
     public void handleMessage(Message msg) {
         //Bundle에 담음 메세지를 갖고옴
         Bundle bundle = msg.getData();
         int id = bundle.getInt("id");
         int incrementValue = bundle.getInt("incrementValue");
-        Log.e("MainHandler", "MainHandler - "+id+", progress[id].getProgress() : "+progress[id].getProgress());
 
-        if(progress[id].getProgress() >= progress[id].getMax()-1){
-            button[id].setText("ReStart "+(id+1));
-            button[id].setClickable(true);
-        }else{
-            //기존 increase의 크기에 incrementValue 만큼 붙여 증가
-            progress[id].incrementProgressBy(incrementValue);
-            button[id].setText("Loading");
-            button[id].setClickable(false);
-        }
+        listener.onProgressChanged(id,incrementValue);
+
+    }
+
+    //handleMessage가 처리될 때 UI 객체를 손쉽게 처리하기 위하여 Listener를 활용
+    public void setOnProgressListener(OnProgressListener _listener){
+        // 해당 클래스를 활용하는 곳에서 setOnProgressListener 선언시
+        // OnProgressListener 생성
+        this.listener = _listener;
     }
 }

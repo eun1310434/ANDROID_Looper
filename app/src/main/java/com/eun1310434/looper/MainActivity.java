@@ -28,6 +28,7 @@
        03) OtherThreadHandler에서 Message 처리
        04) OtherThreadHandler에서 MainThreadHandler를 통해 UI 처리 요청
        05) MainThreadHandler에서 UI 처리
+  ○ handleMessage가 처리될 때 UI 객체를 손쉽게 처리하기 위하여 Listener를 활용
 
 □ Study
   ○ Thread
@@ -104,22 +105,22 @@ package com.eun1310434.looper;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
 public class MainActivity extends AppCompatActivity {
 
-    //MainThread가 아닌 Background Thread
-    BackgroundThread backgourndThreads[];
-
     //UI
     ProgressBar progress[];
     Button button[];
 
+    //MainThread가 아닌 Background Thread를 설정하여 각각의 BackTask가 발생 시 각각 처리
+    BackgroundThread backgourndThreads[];
+
     //메인 스레드의 핸들러 : UI가 생성되는 MainThread를 위한 핸들러
     MainHandler mainThreadHandler;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,7 +175,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //MainThread
-        mainThreadHandler = new MainHandler(progress , button);
+        mainThreadHandler = new MainHandler();
+
+        //handleMessage가 처리될 때 UI 객체를 손쉽게 처리하기 위하여 Listener를 활용
+        mainThreadHandler.setOnProgressListener(new MainHandler.OnProgressListener() {
+            @Override
+            public void onProgressChanged(int id, int incrementValue) {
+                Log.e("MainHandler", "MainHandler - "+id+", progress[id].getProgress() : "+progress[id].getProgress());
+                if(progress[id].getProgress() >= progress[id].getMax()-1){
+                    button[id].setText("ReStart "+(id+1));
+                    button[id].setClickable(true);
+                }else{
+                    //기존 increase의 크기에 incrementValue 만큼 붙여 증가
+                    progress[id].incrementProgressBy(incrementValue);
+                    button[id].setText("Loading");
+                    button[id].setClickable(false);
+                }
+            }
+        });
 
         //BackgroundThread
         backgourndThreads  = new BackgroundThread[]{
