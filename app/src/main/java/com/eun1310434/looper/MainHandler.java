@@ -106,7 +106,7 @@ import android.os.Message;
 //MainActivity → Background → Thread BackgroundHandler → MainHandler
 class MainHandler extends Handler {
 
-    //인터페이스를 활용한 날짜나 시간이 바뀔 때 호출되는 리스너 새로 정의
+    //인터페이스를 활용하여 변경시 연결을 위한 리스너 새로 정의
     //innerClass
     public interface OnProgressListener {
         void onProgressChanged(int id, int incrementValue);
