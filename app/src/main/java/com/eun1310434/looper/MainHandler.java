@@ -1,32 +1,11 @@
 /*=====================================================================
-□ Infomation
-  ○ Data : 13.03.2018
+□ INFORMATION
+  ○ Data : 23.05.2018
   ○ Mail : eun1310434@naver.com
   ○ Blog : https://blog.naver.com/eun1310434
   ○ Reference
      - Do it android app Programming
      - http://itmining.tistory.com/5
-
-□ Function
-  ○ BackgroundThread에서 작동하였던 Thread의 결과를 UI에 뿌려주기 위해 사용하는 헨들러
-     - UI에 접근이 가능한 MainThread 용
-  ○ Android - Looper
-     - MainThread 에서만 Handler를 통해서 UI접근 가능므로 과다한 작업이 발생되면 성능저하가 생김.
-     - Thread를 활용하는 과다한 작업 발생시 해결방법 → 별도의 Thread를 만들어 작업한 뒤 MainThread에 Message로 전달 ( O )
-     - 단 UI에 영향을 주려면 MainThread에 선언한 Handler를 통해서만 접근가능
-     - 작성방법
-       01) MainThread에서 작업 처리가 아닌 별도의 Thread를 만듬.
-           * UI와 관련있는 클래스에서 생성하면 MainThread에서 생성되므로 별도의 클래스에서 생성해야 됨.
-           * 생성자에 생성하면 안됨
-       02) 별도의 Thread에서 전달한 정보를 받아 처리 할 수 있도록 MainThread에 Handler만 작성
-       03) 별도의 Thread에서 MainThread의 Handler에 Message 전송
-     - 구조
-       01) MainThread에 접근할 수 있는 MainThreadHandler를 UI가 선언되어지는 Activity에 선언
-       02) OtherThread에서 Message 발생
-       03) OtherThreadHandler에서 Message 처리
-       04) OtherThreadHandler에서 MainThreadHandler를 통해 UI 처리 요청
-       05) MainThreadHandler에서 UI 처리
-  ○ handleMessage가 처리될 때 UI 객체를 손쉽게 처리하기 위하여 Listener를 활용
 
 □ Study
   ○ Thread
@@ -89,13 +68,37 @@
        02) 별도의 Thread에서 전달한 정보를 받아 처리 할 수 있도록 MainThread에 Handler만 작성
        03) 별도의 Thread에서 MainThread의 Handler에 Message 전송
 
-  ○ 학습체크
-      - 스레드와 멀티스레드란?
-      - 자바 스레드 작성법은?
-      - 스레드의 우선순위란?
-      - 스레드의 동기화 방법은?
-      - 스레드 그룹의 사용 목적은?
-      - 스레드 풀의 사용 목적은?
+  ○ 왜 Background Thread를 사용하는가?
+     - MainThread 에서만 Handler를 통해서 UI접근 가능므로 과다한 작업이 발생되면 성능저하가 생김.
+     - Thread를 활용하는 과다한 작업 발생시 해결방법
+        → 별도의 Thread를 만들어 작업한 뒤 MainThread에 Message로 전달 ( O )
+
+  ○ Android - Looper
+     - MainThread 에서만 Handler를 통해서 UI접근 가능므로 과다한 작업이 발생되면 성능저하가 생김.
+     - Thread를 활용하는 과다한 작업 발생시 해결방법 → 별도의 Thread를 만들어 작업한 뒤 MainThread에 Message로 전달 ( O )
+     - 단 UI에 영향을 주려면 MainThread에 선언한 Handler를 통해서만 접근가능
+     - 작성방법
+       01) MainThread에서 작업 처리가 아닌 별도의 Thread를 만듬.
+           * UI와 관련있는 클래스에서 생성하면 MainThread에서 생성되므로 별도의 클래스에서 생성해야 됨.
+           * 생성자에 생성하면 안됨
+       02) 별도의 Thread에서 전달한 정보를 받아 처리 할 수 있도록 MainThread에 Handler만 작성
+       03) 별도의 Thread에서 MainThread의 Handler에 Message 전송
+     - 구조
+       01) MainThread에 접근할 수 있는 MainThreadHandler를 UI가 선언되어지는 Activity에 선언
+       02) OtherThread에서 Message 발생
+       03) OtherThreadHandler에서 Message 처리
+       04) OtherThreadHandler에서 MainThreadHandler를 통해 UI 처리 요청
+       05) MainThreadHandler에서 UI 처리
+
+  ○ handleMessage가 처리될 때 UI 객체를 손쉽게 처리하기 위하여 Listener를 활용
+
+
+□ FUNCTION
+  ○ Thread
+     - Looper.prepare();
+     - otherThreadhandler = new BackgroundHandler(mainThreadHandler); //Thread 작업은 Thread 말고 Handler에서 실시!!!!!
+     - Looper.loop();
+  ○ Handler
 =====================================================================*/
 package com.eun1310434.looper;
 
