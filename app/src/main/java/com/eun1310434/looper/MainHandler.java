@@ -114,18 +114,7 @@ class MainHandler extends Handler {
     public interface OnProgressListener {
         void onProgressChanged(int id, int incrementValue);
     }
-
-    OnProgressListener listener;
-
-    public void handleMessage(Message msg) {
-        //Bundle에 담음 메세지를 갖고옴
-        Bundle bundle = msg.getData();
-        int id = bundle.getInt("id");
-        int incrementValue = bundle.getInt("incrementValue");
-
-        listener.onProgressChanged(id,incrementValue);
-
-    }
+    private OnProgressListener listener;
 
     //handleMessage가 처리될 때 UI 객체를 손쉽게 처리하기 위하여 Listener를 활용
     public void setOnProgressListener(OnProgressListener _listener){
@@ -133,4 +122,13 @@ class MainHandler extends Handler {
         // OnProgressListener 생성
         this.listener = _listener;
     }
+
+    public void handleMessage(Message msg) {
+        //Bundle에 담음 메세지를 갖고옴
+        Bundle bundle = msg.getData();
+        int id = bundle.getInt("id");
+        int incrementValue = bundle.getInt("incrementValue");
+        listener.onProgressChanged(id,incrementValue);
+    }
+
 }

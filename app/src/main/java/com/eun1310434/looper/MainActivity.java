@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //Handler에 메세지를 전달
                     //mainThreadHandler.sendMessage(msg);
-                    backgourndThreads[finalI].otherThreadhandler.sendMessage(msg);
+                    backgourndThreads[finalI].backThreadhandler.sendMessage(msg);
                 }
             });
         }

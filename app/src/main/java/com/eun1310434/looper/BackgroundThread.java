@@ -109,7 +109,7 @@ public class BackgroundThread extends Thread {
 
     // 새로운 스레드를 위한 핸들러
     int id;
-    BackgroundHandler otherThreadhandler;
+    BackgroundHandler backThreadhandler;
     MainHandler mainThreadHandler;
 
     public BackgroundThread(MainHandler _mainThreadHandler, int _id) {
@@ -131,7 +131,7 @@ public class BackgroundThread extends Thread {
         //MainThread가 아닌 현재의 Thread에서 선언 하였으므로
         //Looper를 통해 Message를 전달
         Looper.prepare();
-        otherThreadhandler = new BackgroundHandler(mainThreadHandler); //Thread 작업은 Thread 말고 Handler에서 실시!!!!!
+        backThreadhandler = new BackgroundHandler(mainThreadHandler); //Thread 작업은 Thread 말고 Handler에서 실시!!!!!
         Looper.loop();
     }
 }

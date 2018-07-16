@@ -112,7 +112,8 @@ import android.util.Log;
 class BackgroundHandler extends Handler {
 
 
-    MainHandler mainThreadHandler;
+    private MainHandler mainThreadHandler;
+    //메인 헨들러를 갖고옴
     public BackgroundHandler(MainHandler _mainThreadHandler){
         this.mainThreadHandler = _mainThreadHandler;
     }
@@ -132,12 +133,11 @@ class BackgroundHandler extends Handler {
                 e.printStackTrace();
             }
 
-            Message resultMsg = Message.obtain(); //별도로 Message를 갖고와야ㅡ함
+            Message resultMsg = Message.obtain(); //별도로 Message를 갖고와야함
             resultMsg.setData(bundle);
             mainThreadHandler.sendMessage(resultMsg);
         }
         Log.e("BackgroundHandler", "BackgroundHandler - "+id+" - END");
-
     }
 
 }
